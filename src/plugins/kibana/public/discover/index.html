@@ -4,6 +4,11 @@
       <div class="typeahead" kbn-typeahead="discover">
         <div class="input-group"
           ng-class="discoverSearch.$invalid ? 'has-error' : ''">
+          <button class="btn-default navbar-link" style="margin-right:20px;">Back</button>
+          <select name="repeatSelect"  ng-change="findRules(channels.model)" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="channels.model">
+              <option ng-repeat="option in channels.availableOptions" value="{{option.id}}">{{option.title}}</option>
+          </select>
+          <div></div>
           <input
             parse-query
             input-focus

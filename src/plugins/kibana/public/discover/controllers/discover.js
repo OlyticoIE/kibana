@@ -63,7 +63,7 @@ define(function (require) {
     }
   });
 
-  app.controller('discover', function ($scope, config, courier, $route, $window, Notifier,
+  app.controller('discover', function ($scope, $http, config, courier, $route, $window, Notifier,
     AppState, timefilter, Promise, Private, kbnUrl, highlightTags) {
 
     const Vis = Private(require('ui/Vis'));
@@ -72,6 +72,29 @@ define(function (require) {
     const HitSortFn = Private(require('plugins/kibana/discover/_hit_sort_fn'));
     const queryFilter = Private(require('ui/filter_bar/query_filter'));
     const filterManager = Private(require('ui/filter_manager'));
+
+
+    // Make request to obtain channels
+     $http({
+        method: 'GET',
+        url: 'http://dashboard.dev/api/channels',
+        headers: {
+             'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
+        }
+      }).then(function successCallback(response) {
+          data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]})
+          $scope.channels = {
+            model: "-1",
+            availableOptions: response.data.channels
+           };
+
+      }, function errorCallback(response) {
+          notify.warning("There was an error obtaining information from the backend! [channel selector component]");
+      });
+
+    $scope.findRules = function(id){
+      alert(id)
+    };
 
     const notify = new Notifier({
       location: 'Discover'
