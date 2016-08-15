@@ -31,6 +31,9 @@
     </form>
 
     <div class="button-group" role="toolbar">
+      <select name="repeatSelect"  ng-change="findRules(channels.model)" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="channels.model">
+          <option ng-repeat="option in channels.availableOptions" value="{{option.id}}">{{option.title}}</option>
+      </select>
       <kbn-tooltip text="New Dashboard" placement="bottom" append-to-body="1">
         <button ng-click="newDashboard()" aria-label="New Dashboard"><i aria-hidden="true" class="fa fa-file-new-o"></i></button>
       </kbn-tooltip>

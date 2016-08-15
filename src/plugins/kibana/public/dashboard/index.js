@@ -52,7 +52,73 @@ define(function (require) {
 
   app.directive('dashboardApp', function (Notifier, courier, AppState, timefilter, kbnUrl) {
     return {
-      controller: function ($scope, $rootScope, $route, $routeParams, $location, Private, getAppState) {
+      controller: function ($scope, $http, $rootScope, $route, $routeParams, $location, Private, getAppState) {
+
+        // Make request to obtain channels
+         $http({
+            method: 'GET',
+            url: 'http://dashboard.dev/api/channels',
+            headers: {
+                 'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
+            }
+          }).then(function successCallback(response) {
+              data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
+              $scope.channels = {
+                model: window.selectedChannel,
+                availableOptions: response.data.channels
+               };
+
+          }, function errorCallback(response) {
+              notify.warning("There was an error obtaining information from the backend! [channel selector component]");
+          });
+
+        // On selector change, update rules
+        $scope.findRules = function(id) {
+          window.selectedChannel = id;
+          if(id != "-1"){
+            $http({
+               method: 'GET',
+               url: 'http://dashboard.dev/api/arguments',
+               params: {channel_id: id},
+               headers: {
+                    'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
+               }
+             }).then(function successCallback(response) {
+                  $scope.customQuery(response.data.arguments)
+
+             }, function errorCallback(response) {
+                  notify.warning("There was an error obtaining information from the backend! [channel selector component]");
+             });
+           }
+           else{
+             window.scope = $scope;
+             $scope.queryShoulds = []
+           }
+        };
+
+
+        $scope.customQuery = function (argDetails) {
+          var queryShoulds = [];
+          argDetails.forEach(function (value) {
+            queryShoulds.push({
+              bool: {
+                must: $scope.build_bool_query(value.must),
+                should: $scope.build_bool_query(value.should),
+                must_not: $scope.build_bool_query(value.dont)
+              }
+            })
+          });
+          window.scope = $scope;
+          $scope.queryShoulds = queryShoulds;
+        };
+
+        $scope.build_bool_query = function (values) {
+          var queries = [];
+          values.forEach(function (value) {
+            queries.push({ multi_match: {query: value, type: 'phrase', fields: ['title','content']}});
+          });
+          return queries
+        }
 
         const queryFilter = Private(require('ui/filter_bar/query_filter'));
 

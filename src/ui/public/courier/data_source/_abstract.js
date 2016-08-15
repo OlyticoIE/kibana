@@ -322,13 +322,23 @@ define(function (require) {
                 }
               });
 
+              // If the parameter doesn't pass through resolve the array to empty
+              var shoulds
+              try{
+                shoulds = window.scope.queryShoulds
+              }catch(e){
+                shoulds = []
+              }
+
               flatState.body.query = {
                 filtered: {
                   query: flatState.body.query,
                   filter: {
                     bool: {
                       must: _(flatState.filters).filter(filterNegate(false)).map(cleanFilter).value(),
-                      must_not: _(flatState.filters).filter(filterNegate(true)).map(cleanFilter).value()
+                      must_not: _(flatState.filters).filter(filterNegate(true)).map(cleanFilter).value(),
+                      should: shoulds,
+                      minimum_should_match: 1
                     }
                   }
                 }
