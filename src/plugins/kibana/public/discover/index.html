@@ -27,6 +27,18 @@
       <select  ng-cloak name="repeatSelect"  ng-change="findRules(channels.model)" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="channels.model">
           <option ng-repeat="option in channels.availableOptions" value="{{option.id}}">{{option.title}}</option>
       </select>
+      <select ng-show="categories.availableOptions!=null" name="categoriesSelector" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="categories.model">
+          <option ng-repeat="option in categories.availableOptions" value="{{option.id}}">{{option.name}}</option>
+      </select>
+      <kbn-tooltip ng-show="categories.availableOptions!=null" text="Bulk Assign Category" placement="bottom" append-to-body="1">
+        <button
+          class="delete"
+          confirm-click="categorizeData()"
+          confirmation="This will add the category to all the selected bits. Are you sure you want to do this?"
+          aria-label="Category Assign">
+          <i aria-hidden="true" class="fa fa-tags"></i>
+        </button>
+      </kbn-tooltip>
       <kbn-tooltip text="New Search" placement="bottom" append-to-body="1">
         <button
           ng-click="newQuery()"

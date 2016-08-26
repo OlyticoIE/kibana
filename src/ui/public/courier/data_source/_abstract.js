@@ -352,6 +352,7 @@ define(function (require) {
       });
     };
 
+    console.log(SourceAbstract)
     return SourceAbstract;
   };
 });

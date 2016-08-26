@@ -65,6 +65,9 @@
     </div>
 
     <div class="button-group">
+      <select name="repeatSelect"  ng-change="findRules(channels.model)" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="channels.model">
+          <option ng-repeat="option in channels.availableOptions" value="{{option.id}}">{{option.title}}</option>
+      </select>
       <kbn-tooltip text="New Visualization" placement="bottom" append-to-body="1">
         <button ng-click="startOver()" aria-label="New Visualization"><i aria-hidden="true" class="fa fa-file-new-o"></i></button>
       </kbn-tooltip>

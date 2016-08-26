@@ -36,6 +36,11 @@ define(function (require) {
             if (_.isArray(indexList) && indexList.length === 0) {
               indexList.push('.kibana-devnull');
             }
+
+            // save the last query to a scope
+            window.currentQuery = toJson(fetchParams.body || {});
+
+
             return angular.toJson({
               index: indexList,
               type: fetchParams.type,

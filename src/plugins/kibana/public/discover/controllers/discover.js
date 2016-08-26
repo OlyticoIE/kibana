@@ -93,6 +93,7 @@ define(function (require) {
 
     // On selector change, update rules
     $scope.findRules = function(id) {
+      $scope.loadCategories(id)
       window.selectedChannel = id;
       if(id != "-1"){
         $http({
@@ -114,7 +115,6 @@ define(function (require) {
          $scope.queryShoulds = []
        }
     };
-
 
     $scope.customQuery = function (argDetails) {
       var queryShoulds = [];
@@ -138,6 +138,61 @@ define(function (require) {
       });
       return queries
     }
+
+
+
+    $scope.loadCategories = function (channel_id){
+
+      if(channel_id == "-1"){
+        $scope.categories = {
+          model: null,
+          availableOptions: null
+         };
+      }
+      else{
+
+        $http({
+           method: 'GET',
+           url: 'http://dashboard.dev/api/categories',
+           params: {"category[channel_id]":channel_id},
+           headers: {
+                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
+           }
+         }).then(function successCallback(response) {
+             $scope.categories = {
+               model: null,
+               availableOptions: response.data.categories
+              };
+
+         }, function errorCallback(response) {
+             notify.warning("There was an error obtaining the categories for a channel!");
+             console.log(response)
+         });
+
+       }
+    }
+
+    // send elasticsearch query and category id to backend to categorize
+    $scope.categorizeData = function () {
+      if ($scope.categories.model == null){
+        notify.warning("Please choose a category before attempting to bulk assign")
+      }
+      else{
+        $http({
+           method: 'GET',
+           url: 'http://dashboard.dev/api/categorize',
+           params: {"category_id":$scope.categories.model, "query": window.currentQuery},
+           headers: {
+                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
+           }
+         }).then(function successCallback(response) {
+             notify.info("Content successfully categorized");
+         }, function errorCallback(response) {
+             notify.warning("There was an error categorizing the data");
+         });
+      }
+      // alert(window.currentQuery);
+    };
 
 
     const notify = new Notifier({
