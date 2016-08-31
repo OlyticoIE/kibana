@@ -73,6 +73,7 @@
     "@spalger/ui-ace": "0.2.3",
     "angular": "1.4.7",
     "angular-bootstrap-colorpicker": "3.0.19",
+    "angular-contextmenu": "0.2.0",
     "angular-elastic": "2.5.0",
     "angular-route": "1.4.7",
     "angular-sanitize": "1.5.7",

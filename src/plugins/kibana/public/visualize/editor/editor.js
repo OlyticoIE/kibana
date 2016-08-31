@@ -52,9 +52,7 @@ define(function (require) {
      $http({
         method: 'GET',
         url: 'http://dashboard.dev/api/channels',
-        headers: {
-             'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-        }
+        withCredentials: true
       }).then(function successCallback(response) {
           data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
           $scope.channels = {
@@ -74,11 +72,10 @@ define(function (require) {
            method: 'GET',
            url: 'http://dashboard.dev/api/arguments',
            params: {channel_id: id},
-           headers: {
-                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-           }
+           withCredentials: true
          }).then(function successCallback(response) {
               $scope.customQuery(response.data.arguments)
+              $scope.fetch()
 
          }, function errorCallback(response) {
               notify.warning("There was an error obtaining information from the backend! [channel selector component]");
@@ -88,6 +85,7 @@ define(function (require) {
          window.scope = $scope;
          $scope.queryShoulds = []
        }
+       $scope.fetch()
     };
 
 

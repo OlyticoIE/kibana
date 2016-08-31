@@ -11,12 +11,14 @@
       </thead>
       <tbody>
         <tr ng-repeat="row in page|limitTo:limit track by row._index+row._type+row._id+row._score"
+          ng-dblclick="addit({row_id: row._id});"
           kbn-table-row="row"
           columns="columns"
           sorting="sorting"
           index-pattern="indexPattern"
           filter="filter"
-          class="discover-table-row"></tr>
+          class="discover-table-row"
+          addtoselectedlist="addtoselectedlist({row_id: row._id});"></tr>
       </tbody>
     </table>
   </paginate>
@@ -30,12 +32,16 @@
     </thead>
     <tbody>
       <tr ng-repeat="row in hits|limitTo:limit track by row._index+row._type+row._id+row._score"
+        ng-dblclick="addit({row_id: row._id});"
         kbn-table-row="row"
         columns="columns"
         sorting="sorting"
         index-pattern="indexPattern"
         filter="filter"
-        class="discover-table-row"></tr>
+        class="discover-table-row",
+        addtoselectedlist="addtoselectedlist({row_id: row._id})">
+        <td><h1>Hello</h1></td>
+      </tr>
     </tbody>
   </table>
   <kbn-infinite-scroll ng-if="infiniteScroll" more="addRows"></kbn-infinite-scroll>

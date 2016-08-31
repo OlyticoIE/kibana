@@ -76,6 +76,13 @@
           <i aria-hidden="true" class="fa fa-external-link"></i>
         </button>
       </kbn-tooltip>
+      <kbn-tooltip text="ReDefine" placement="bottom" append-to-body="1">
+        <button
+          ng-click="reDefine()"
+          aria-label="Redefine Search">
+          <i aria-hidden="true" class="fa fa-filter"></i>
+        </button>
+      </kbn-tooltip>
     </div>
   </navbar>
 
@@ -218,7 +225,9 @@
                 sorting="state.sort"
                 columns="state.columns"
                 infinite-scroll="true"
-                filter="filterQuery">
+                filter="filterQuery"
+                addit="getbit(row_id)"
+                addtoselectedlist="addtoselectedlist(row_id)">
               </doc-table>
 
               <div ng-if="rows.length == opts.sampleSize" class="discover-table-footer">

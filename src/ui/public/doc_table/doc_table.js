@@ -23,6 +23,8 @@ define(function (require) {
         searchSource: '=?',
         infiniteScroll: '=?',
         filter: '=?',
+        addit: '&',
+        addtoselectedlist: '&'
       },
       link: function ($scope) {
         var notify = new Notifier();

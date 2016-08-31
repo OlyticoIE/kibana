@@ -73,13 +73,49 @@ define(function (require) {
     const queryFilter = Private(require('ui/filter_bar/query_filter'));
     const filterManager = Private(require('ui/filter_manager'));
 
+    $scope.getbit = function(row_id) {
+      $scope.state.query = "_id:"+row_id
+      $scope.fetch();
+    }
+
+    // the bits we will work with coo
+    $scope.selectedBits = []
+
+    $scope.addtoselectedlist = function(row_id) {
+      var popped = false;
+      $scope.selectedBits.forEach(function (id, i) {
+        if(id === row_id) {
+          popped = true;
+          $scope.selectedBits.splice(i, 1);
+        }
+      });
+
+      if(popped === false) {
+        $scope.selectedBits.push(row_id);
+      }
+    }
+
+    $scope.reDefine = function() {
+      search = ""
+      max = ($scope.selectedBits.length-1)
+
+      $scope.selectedBits.forEach(function (bit, i) {
+        if (i != max){
+          search += "_id:"+bit+ " OR "
+        }
+        else {
+          search += "_id:"+bit
+        }
+      })
+      $scope.state.query = search
+      $scope.fetch();
+    }
+
     // Make request to obtain channels
      $http({
         method: 'GET',
         url: 'http://dashboard.dev/api/channels',
-        headers: {
-             'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-        }
+        withCredentials: true
       }).then(function successCallback(response) {
           data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
           $scope.channels = {
@@ -100,11 +136,10 @@ define(function (require) {
            method: 'GET',
            url: 'http://dashboard.dev/api/arguments',
            params: {channel_id: id},
-           headers: {
-                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-           }
+           withCredentials: true
          }).then(function successCallback(response) {
               $scope.customQuery(response.data.arguments)
+              $scope.fetch()
 
          }, function errorCallback(response) {
               notify.warning("There was an error obtaining information from the backend! [channel selector component]");
@@ -114,6 +149,7 @@ define(function (require) {
          window.scope = $scope;
          $scope.queryShoulds = []
        }
+       $scope.fetch()
     };
 
     $scope.customQuery = function (argDetails) {
@@ -155,9 +191,7 @@ define(function (require) {
            method: 'GET',
            url: 'http://dashboard.dev/api/categories',
            params: {"category[channel_id]":channel_id},
-           headers: {
-                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-           }
+           withCredentials: true
          }).then(function successCallback(response) {
              $scope.categories = {
                model: null,
@@ -172,6 +206,7 @@ define(function (require) {
        }
     }
 
+
     // send elasticsearch query and category id to backend to categorize
     $scope.categorizeData = function () {
       if ($scope.categories.model == null){
@@ -182,16 +217,13 @@ define(function (require) {
            method: 'GET',
            url: 'http://dashboard.dev/api/categorize',
            params: {"category_id":$scope.categories.model, "query": window.currentQuery},
-           headers: {
-                'Authorization': 'Token token="aAX8ZZ-mEygZQo3VbzBdY", email="cifinn@tcd.ie"'
-           }
+           withCredentials: true
          }).then(function successCallback(response) {
              notify.info("Content successfully categorized");
          }, function errorCallback(response) {
              notify.warning("There was an error categorizing the data");
          });
       }
-      // alert(window.currentQuery);
     };
 
 

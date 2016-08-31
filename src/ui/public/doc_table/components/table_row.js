@@ -35,7 +35,8 @@ define(function (require) {
         columns: '=',
         filter: '=',
         indexPattern: '=',
-        row: '=kbnTableRow'
+        row: '=kbnTableRow',
+        addtoselectedlist: '&'
       },
       link: function ($scope, $el) {
         $el.after('<tr>');
@@ -50,6 +51,11 @@ define(function (require) {
 
         // when we compile the toggle button in the summary, we use this $scope
         var $toggleScope;
+
+        //Select a piece of content (* a bit)
+        $scope.toggleCheckBit = function() {
+          $scope.addtoselectedlist();
+        }
 
         // toggle display of the rows details, a full list of the fields from each row
         $scope.toggleRow = function () {
