@@ -214,7 +214,7 @@ define(function (require) {
       }
       else{
         $http({
-           method: 'GET',
+           method: 'POST',
            url: 'http://dashboard.dev/api/categorize',
            params: {"category_id":$scope.categories.model, "query": window.currentQuery},
            withCredentials: true
@@ -224,6 +224,25 @@ define(function (require) {
              notify.warning("There was an error categorizing the data");
          });
       }
+    };
+
+    $scope.removeCategory = function () {
+      if ($scope.categories.model == null){
+        notify.warning("Please choose a category before attempting to remove the category from selected bits")
+      }
+      else{
+        $http({
+           method: 'DELETE',
+           url: 'http://dashboard.dev/api/remove-category',
+           params: {"category_id":$scope.categories.model, "query": window.currentQuery},
+           withCredentials: true
+         }).then(function successCallback(response) {
+             notify.info("Content successfully categorized");
+         }, function errorCallback(response) {
+             notify.warning("There was an error categorizing the data");
+         });
+      }
+      alert(window.currentQuery);
     };
 
 

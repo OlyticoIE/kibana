@@ -36,7 +36,15 @@
           confirm-click="categorizeData()"
           confirmation="This will add the category to all the selected bits. Are you sure you want to do this?"
           aria-label="Category Assign">
-          <i aria-hidden="true" class="fa fa-tags"></i>
+          <i aria-hidden="true" class="fa fa-tags" style="color:#80f077;"></i>
+        </button>
+      </kbn-tooltip>
+      <kbn-tooltip ng-show="categories.availableOptions!=null" text="Bulk Remove Category" placement="bottom" append-to-body="1">
+        <button
+          confirm-click="removeCategory()"
+          confirmation="This will delete the category from all the selected bits. Are you sure you want to do this?"
+          aria-label="Category Remove">
+          <i aria-hidden="true" class="fa fa-chain-broken" style="color:#F4B233;"></i>
         </button>
       </kbn-tooltip>
       <kbn-tooltip text="New Search" placement="bottom" append-to-body="1">
@@ -80,7 +88,7 @@
         <button
           ng-click="reDefine()"
           aria-label="Redefine Search">
-          <i aria-hidden="true" class="fa fa-filter"></i>
+          <i aria-hidden="true" class="fa fa-filter" style="color:#21a8d5;"></i>
         </button>
       </kbn-tooltip>
     </div>
