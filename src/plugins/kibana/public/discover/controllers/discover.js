@@ -204,7 +204,7 @@ define(function (require) {
           $http({
             method: 'GET',
             url: 'http://backend.olytico.ie/api/categories',
-            params: {"category[channel_id]":channel_id},
+            params: {"channel_id":channel_id},
             withCredentials: true
           }).then(function successCallback(response) {
             $scope.categories = {
