@@ -114,7 +114,7 @@ define(function (require) {
       // Make request to obtain channels
       $http({
         method: 'GET',
-        url: 'http://explore.olytico.ie/api/channels',
+        url: 'http://backend.olytico.ie/api/channels',
         withCredentials: true
       }).then(function successCallback(response) {
         data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
@@ -134,7 +134,7 @@ define(function (require) {
         if(id != "-1"){
           $http({
             method: 'GET',
-            url: 'http://explore.olytico.ie/api/arguments',
+            url: 'http://backend.olytico.ie/api/arguments',
             params: {channel_id: id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -203,7 +203,7 @@ define(function (require) {
 
           $http({
             method: 'GET',
-            url: 'http://explore.olytico.ie/api/categories',
+            url: 'http://backend.olytico.ie/api/categories',
             params: {"category[channel_id]":channel_id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -229,7 +229,7 @@ define(function (require) {
         else{
           $http({
             method: 'POST',
-            url: 'http://explore.olytico.ie/api/categorize',
+            url: 'http://backend.olytico.ie/api/categorize',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -247,7 +247,7 @@ define(function (require) {
         else{
           $http({
             method: 'DELETE',
-            url: 'http://explore.olytico.ie/api/remove-category',
+            url: 'http://backend.olytico.ie/api/remove-category',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
