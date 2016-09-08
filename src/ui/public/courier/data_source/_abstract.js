@@ -323,7 +323,7 @@ define(function (require) {
               });
 
               // If the parameter doesn't pass through resolve the array to empty
-              var shoulds
+              var shoulds;
               try{
                 shoulds = window.scope.queryShoulds
               }catch(e){

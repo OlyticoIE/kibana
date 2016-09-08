@@ -51,7 +51,7 @@ define(function (require) {
     // Make request to obtain channels
      $http({
         method: 'GET',
-        url: 'http://dashboard.dev/api/channels',
+        url: 'http://explore.olytico.ie/api/channels',
         withCredentials: true
       }).then(function successCallback(response) {
           data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
@@ -70,7 +70,7 @@ define(function (require) {
       if(id != "-1"){
         $http({
            method: 'GET',
-           url: 'http://dashboard.dev/api/arguments',
+           url: 'http://explore.olytico.ie/api/arguments',
            params: {channel_id: id},
            withCredentials: true
          }).then(function successCallback(response) {

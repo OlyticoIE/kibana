@@ -57,7 +57,7 @@ define(function (require) {
         // Make request to obtain channels
          $http({
             method: 'GET',
-            url: 'http://dashboard.dev/api/channels',
+            url: 'http://explore.olytico.ie/api/channels',
             withCredentials: true
           }).then(function successCallback(response) {
               data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
@@ -76,7 +76,7 @@ define(function (require) {
           if(id != "-1"){
             $http({
                method: 'GET',
-               url: 'http://dashboard.dev/api/arguments',
+               url: 'http://explore.olytico.ie/api/arguments',
                params: {channel_id: id},
                withCredentials: true
              }).then(function successCallback(response) {
@@ -88,24 +88,39 @@ define(function (require) {
            }
            else{
              window.scope = $scope;
-             $scope.queryShoulds = []
+             $scope.queryShoulds = [];
+             $scope.queryMusts = [];
            }
         };
 
 
         $scope.customQuery = function (argDetails) {
           var queryShoulds = [];
+          var termQueries, termQuery;
+          var newQuery;
+
           argDetails.forEach(function (value) {
-            queryShoulds.push({
-              bool: {
-                must: $scope.build_bool_query(value.must),
-                should: $scope.build_bool_query(value.should),
-                must_not: $scope.build_bool_query(value.dont)
+            newQuery = { bool: { must: [], should: [], must_not: [], minimum_should_match: 1 } }
+            newQuery['bool']['must'] = $scope.build_bool_query(value.must);
+            newQuery['bool']['should'] = $scope.build_bool_query(value.should);
+            newQuery['bool']['must_not'] = $scope.build_bool_query(value.dont);
+
+            termQueries = [];
+            ['forum_id', 'facebook_id'].forEach(function(key) {
+              termQuery = { "term": {}};
+              if (value[key]) {
+                termQuery["term"][key] = value[key];
+                newQuery['bool']['must'] = newQuery['bool']['must'].concat(termQuery);
               }
-            })
+            });
+
+            if (value['id'] == 9) { console.log(newQuery); }
+            if (newQuery['bool']['must'].length > 0 || newQuery['bool']['should'] > 0 || newQuery['bool']['must_not'].length > 0) {
+              queryShoulds.push(newQuery);
+            }
           });
-          window.scope = $scope;
           $scope.queryShoulds = queryShoulds;
+          window.scope = $scope;
         };
 
         $scope.build_bool_query = function (values) {
