@@ -78,6 +78,12 @@ define(function (require) {
         $scope.fetch();
       }
 
+      $scope.categoryBits = function() {
+        $scope.state.query = "category_ids:" + $scope.categories.model
+        $scope.fetch();
+      }
+
+
       // the bits we will work with coo
       $scope.selectedBits = []
 
@@ -114,7 +120,7 @@ define(function (require) {
       // Make request to obtain channels
       $http({
         method: 'GET',
-        url: 'http://backend.olytico.ie/api/channels',
+        url: 'http://dashboard.dev/api/channels',
         withCredentials: true
       }).then(function successCallback(response) {
         data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
@@ -134,7 +140,7 @@ define(function (require) {
         if(id != "-1"){
           $http({
             method: 'GET',
-            url: 'http://backend.olytico.ie/api/arguments',
+            url: 'http://dashboard.dev/api/arguments',
             params: {channel_id: id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -203,7 +209,7 @@ define(function (require) {
 
           $http({
             method: 'GET',
-            url: 'http://backend.olytico.ie/api/categories',
+            url: 'http://dashboard.dev/api/categories',
             params: {"channel_id":channel_id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -229,7 +235,7 @@ define(function (require) {
         else{
           $http({
             method: 'POST',
-            url: 'http://backend.olytico.ie/api/categorize',
+            url: 'http://dashboard.dev/api/categorize',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -247,7 +253,7 @@ define(function (require) {
         else{
           $http({
             method: 'DELETE',
-            url: 'http://backend.olytico.ie/api/remove-category',
+            url: 'http://dashboard.dev/api/remove-category',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -556,13 +562,28 @@ define(function (require) {
         }));
 
         segmented.on('mergedSegment', function (merged) {
+
           $scope.mergedEsResp = merged;
           $scope.hits = merged.hits.total;
 
           const indexPattern = $scope.searchSource.get('index');
+          // console.log(indexPattern.fields[9])
+          // indexPattern.fields[9].$$spec.type = 'string';
+          // indexPattern.fields[9].format = 'String';
+          // console.log(indexPattern.fields[9])
+          //
+          //
+          // // for the category ids show the name of the category
+          // merged.hits.hits.slice().forEach(function (hit) {
+          //   if ("category_ids" in hit._source){
+          //     hit._source.category_ids = "ciaran"
+          //   }
+          // });
+
 
           // the merge rows, use a new array to help watchers
           $scope.rows = merged.hits.hits.slice();
+
 
           notify.event('flatten hit and count fields', function () {
             let counts = $scope.fieldCounts;

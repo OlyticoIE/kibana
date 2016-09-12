@@ -30,6 +30,14 @@
       <select ng-show="categories.availableOptions!=null" name="categoriesSelector" style="margin-right:20px;" class="form-control" id="repeatSelect" ng-model="categories.model">
           <option ng-repeat="option in categories.availableOptions" value="{{option.id}}">{{option.name}}</option>
       </select>
+      <kbn-tooltip ng-show="categories.availableOptions!=null" text="Bits In A Category" placement="bottom" append-to-body="1">
+        <button
+          class="delete"
+          ng-click="categoryBits()"
+          aria-label="Category Assign">
+          <i aria-hidden="true" class="fa fa-list"></i>
+        </button>
+      </kbn-tooltip>
       <kbn-tooltip ng-show="categories.availableOptions!=null" text="Bulk Assign Category" placement="bottom" append-to-body="1">
         <button
           class="delete"
