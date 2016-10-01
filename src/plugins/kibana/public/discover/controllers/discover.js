@@ -120,7 +120,7 @@ define(function (require) {
       // Make request to obtain channels
       $http({
         method: 'GET',
-        url: 'http://dashboard.dev/api/channels',
+        url: 'http://backend.olytico.ie/api/channels',
         withCredentials: true
       }).then(function successCallback(response) {
         data = response.data.channels.push({"id":"-1","title":"Everything","description":"test","arguments":[]});
@@ -140,7 +140,7 @@ define(function (require) {
         if(id != "-1"){
           $http({
             method: 'GET',
-            url: 'http://dashboard.dev/api/arguments',
+            url: 'http://backend.olytico.ie/api/arguments',
             params: {channel_id: id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -170,7 +170,7 @@ define(function (require) {
           newQuery['bool']['must_not'] = $scope.build_bool_query(value.dont);
 
           termQueries = [];
-          ['forum_id', 'facebook_id'].forEach(function(key) {
+          ['forum_id', 'facebook_id', 'location_id'].forEach(function(key) {
             termQuery = { "term": {}};
             if (value[key]) {
               termQuery["term"][key] = value[key];
@@ -179,7 +179,7 @@ define(function (require) {
           });
 
           if (value['id'] == 9) { console.log(newQuery); }
-          if (newQuery['bool']['must'].length > 0 || newQuery['bool']['should'] > 0 || newQuery['bool']['must_not'].length > 0) {
+          if (newQuery['bool']['must'].length > 0 || newQuery['bool']['should'].length > 0 || newQuery['bool']['must_not'].length > 0) {
             queryShoulds.push(newQuery);
           }
         });
@@ -209,7 +209,7 @@ define(function (require) {
 
           $http({
             method: 'GET',
-            url: 'http://dashboard.dev/api/categories',
+            url: 'http://backend.olytico.ie/api/categories',
             params: {"channel_id":channel_id},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -235,7 +235,7 @@ define(function (require) {
         else{
           $http({
             method: 'POST',
-            url: 'http://dashboard.dev/api/categorize',
+            url: 'http://backend.olytico.ie/api/categorize',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
@@ -253,7 +253,7 @@ define(function (require) {
         else{
           $http({
             method: 'DELETE',
-            url: 'http://dashboard.dev/api/remove-category',
+            url: 'http://backend.olytico.ie/api/remove-category',
             params: {"category_id":$scope.categories.model, "query": window.currentQuery},
             withCredentials: true
           }).then(function successCallback(response) {
